@@ -96,10 +96,72 @@ The solution is built on a Star Schema to improve model performance, simplify DA
 - **Measures Table**
   - `_Metrics` – Contains 18 DAX measures organized into five display folders.
     ### Star Schema
-![Star Schema](assets/data_model.png)
+    ![Star Schema](assets/data_model_screenshot.png)
  
 
   ---
 
+## DAX Measures
+A total of 18 DAX measures were created and organized into five display folders to improve model organization, readability, and maintainability.
+
+### 1.  Core Metrics
+| Measure Name | DAX Formula | Description / Business Logic |
+| :--- | :--- | :--- |
+| **Total Customers** | `Total Customers = COUNTROWS('Dim_Customer')` | Calculates the total size of the customer base. |
+| **Churned Customers** | `Churned Customers = CALCULATE(COUNTROWS('Dim_Customer'), 'Dim_Customer'[Churn_Status] = "Yes")` | Counts the total number of customers who have officially terminated their relationship. |
+| **Churn Rate** | `Churn Rate = DIVIDE([Churned Customers], [Total Customers], 0)` | Computes the percentage of the customer base that has churned, using safe division to handle blank values. |
+| **Retention Rate** | `Retention Rate = 1 - [Churn Rate]` | Tracks the percentage of active customers successfully retained by the bank. |
+| **Average Account Balance** | `Average Account Balance = AVERAGE('Dim_Customer'[Account_Balance])` | Calculates the mean financial footprint across the customer portfolio. |
+| **Total Complaints** | `Total Complaints = SUM('Dim_Customer'[Num_Of_Complaints])` | Aggregates the absolute volume of customer complaints logged. |
+
+
+---
+
+### 2. Time Intelligence
+| Measure | Formula Summary |
+|---|---|
+| Churned Customer YTD | TOTALYTD(Churned Customer, Dates[Date]) |
+| Churned Customer Prior Year | CALCULATE(Churned Customer, SAMEPERIODLASTYEAR) |
+| Churned Growth % | DIVIDE(Current - Prior Year, Prior Year) |
+| 3-Month Moving Avg Churn | AVERAGEX(DATESINPERIOD, last 3 months) |
+
+
+---
+
+### 3. Financial Impact
+
+The following financial impact measures quantify the monetary scale of customer attrition, mapping customer behavior directly to the bank's bottom-line exposure:
+
+| Measure Name | DAX Formula | Description / Business Logic |
+| :--- | :--- | :--- |
+| **Total Balance** | `Total Balance = SUM('Dim_Customer'[Account_Balance])` | Aggregates the total financial deposits across the entire customer portfolio. |
+| **Revenue at Risk** | `Revenue at Risk = CALCULATE(SUM('Dim_Customer'[Account_Balance]), 'Dim_Customer'[Churn_Status] = "Yes")` | Quantifies the total active deposit volume lost due to customer churn (currently valued at ₦3bn). |
+| **% of Total Balance at Risk** | `[% of Total Balance at Risk] = DIVIDE([Revenue at Risk], [Total Balance], 0)` | Calculates the percentage of the bank's asset base that has been lost to churn, using safe division. |
+
+
+---
+
+### 4. Operational Risk
+
+The following operational risk measures isolate customer feedback loops to determine whether service failures and complaint volumes correlate directly with customer attrition:
+
+| Measure Name | DAX Formula | Description / Business Logic |
+| :--- | :--- | :--- |
+| **Avg Complaints — Churned** | `Avg Complaints — Churned = CALCULATE(AVERAGE('Dim_Customer'[Num_Of_Complaints]), 'Dim_Customer'[Churn_Status] = "Yes")` | Computes the average number of complaints logged by customers who ultimately churned. |
+| **Avg Complaints — Retained** | `Avg Complaints — Retained = CALCULATE(AVERAGE('Dim_Customer'[Num_Of_Complaints]), 'Dim_Customer'[Churn_Status] = "No")` | Computes the average number of complaints logged by active, retained customers. |
+| **Complaint Gap** | `Complaint Gap = [Avg Complaints — Churned] - [Avg Complaints — Retained]` | Measures the absolute difference in complaint volumes between churned and retained cohorts to identify operational friction points. |
+
+
+---
+
+### 5. Risk Segmentation
+
+The following risk segmentation measures isolate specific behavioral cohorts and asset tiers, allowing the business to pinpoint exactly which customer segments present the highest attrition risk:
+
+| Measure Name | DAX Formula | Description / Business Logic |
+| :--- | :--- | :--- |
+| **High Net Worth Churn Rate** | `High Net Worth Churn Rate = CALCULATE([Churn Rate], 'Dim_Customer'[Balance_Tier] = "High")` | Isolates the churn rate specifically for premium, high-value deposit holders to track top-tier revenue loss. |
+| **Active Churn Rate** | `Active Churn Rate = CALCULATE([Churn Rate], 'Dim_Customer'[Is_Active] = "Yes")` | Evaluates the attrition rate among customers who are frequently engaging with the bank's services. |
+| **Inactive Churn Rate** | `Inactive Churn Rate = CALCULATE([Churn Rate], 'Dim_Customer'[Is_Active] = "No")` | Measures the churn rate among dormant accounts, highlighting the conversion rate from low engagement to complete attrition. |
 
  
