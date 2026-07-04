@@ -15,7 +15,7 @@ An end-to-end Power BI business intelligence solution that analyzes customer chu
 - [Data Model](#data-model)
 - [DAX Measures](#dax-measures)
 - [Report Pages](#report-pages)
-- [Insights](#insights)
+- [Key Business Insights](#key-business-insights)
 - [Recommendations](#recommendations)
 - [Conclusion](#conclusion)
 - [Tools Used](#tools-used)
@@ -31,11 +31,23 @@ FirstEdge Bank is experiencing elevated customer attrition, creating significant
 
 ---
 
-## ❓ Business Problem 
-FirstEdge Bank is experiencing a critical customer retention challenge,, with Approximately 51.7% of the bank's retail customer base has churned either closed their accounts or become inactive. This trend directly affects the bank's ability to sustain long-term revenue growth, strengthen customer loyalty, and maximize customer lifetime value. Executive stakeholders-including the Chief Executive Officer, Chief Risk Officer, Head of Retail Banking, and Customer Retention team require a clearer understanding of which customers are most at risk, why they are leaving, and where intervention efforts should be prioritized.
-Customer attrition is not a one-time event but a continuous business risk that compounds over time. Although year-over-year churn has declined by approximately 50%, indicating encouraging progress, maintaining and improving this trend requires proactive action. The highest levels of churn are concentrated in the East (55.9%) and North (53.2%) regions, suggesting that regional performance, customer engagement, pricing strategy, and onboarding processes require closer evaluation to prevent further customer losses.
-The financial implications are substantial. Approximately ₦3 billion in customer deposits are associated with churned accounts, representing a direct revenue and balance sheet risk. As customer acquisition is considerably more expensive than customer retention, continued attrition particularly among customers within their first two years of banking-threatens the sustainability of the bank's growth strategy and increases the cost of replacing lost customers.
-This analysis was undertaken to identify the customer segments most vulnerable to churn, quantify the financial exposure associated with customer attrition, and uncover the key behavioral and operational factors influencing customer departures. Success will be measured by reducing the overall churn rate from 51.7% to below 35% within the next 12 months, decreasing inactivity among customers aged 46–55, increasing product adoption during customers' first two years with the bank, and reducing churn in the East and North regions by at least 10 percentage points.
+##  Business Problem 
+FirstEdge Bank is losing customers at a rate it cannot afford to ignore. More than half (51.7%) of its retail customers have either closed their accounts or become inactive, placing approximately ₦3 billion in customer deposits at risk. Customer churn is no longer just a retention issue—it has become a financial and growth challenge.
+
+The bank also lacks clear visibility into who is leaving, why they are leaving, and where the problem is most severe. Churn is highest in the East (55.9%) and North (53.2%) regions, making it difficult to focus retention efforts where they will have the greatest impact. Although churn has fallen by 50% year over year, the overall churn rate remains far above an acceptable level.
+
+The cost of replacing a customer is significantly higher than the cost of retaining one. Every customer who leaves represents lost deposits, reduced opportunities to sell additional products, and additional acquisition costs. The risk is even greater among customers in their first two years, where the bank is losing relationships before they have had time to generate long-term value.
+
+This project was undertaken to answer three business questions:
+- Which customers are most likely to churn?
+- What factors are driving customer attrition?
+-  Where should retention efforts be focused first?
+
+Success will be measured by reducing overall churn to below 35%, lowering churn in the East and North regions, improving retention within the 46–55 age segment, and increasing average product adoption among new customers.
+
+**Problem Classification:** Diagnostic & Strategic
+
+**Primary Business Value:** Revenue Protection & Customer Retention
 
 
 ---
@@ -69,7 +81,8 @@ The analysis is based on a synthetic retail banking dataset designed to simulate
 
 ---
 
-## Data Preparation 
+## Data Preparation (Power Query)
+
 The source data was cleaned and transformed in Power Query to improve data quality, ensure consistency, and prepare the model for business analysis.
 
 Key data preparation activities included:
@@ -105,6 +118,9 @@ The solution is built on a Star Schema to improve model performance, simplify DA
 A total of 18 DAX measures were created and organized into five display folders to improve model organization, readability, and maintainability.
 
 ### 1.  Core Metrics
+
+To drive the analytical deep-dive into customer retention, the following core DAX measures were built directly into the data model to ensure dynamic, real-time calculations across all dashboard visuals:
+
 | Measure Name | DAX Formula | Description / Business Logic |
 | :--- | :--- | :--- |
 | **Total Customers** | `Total Customers = COUNTROWS('Dim_Customer')` | Calculates the total size of the customer base. |
@@ -118,6 +134,11 @@ A total of 18 DAX measures were created and organized into five display folders 
 ---
 
 ### 2. Time Intelligence
+
+The following time intelligence measures were implemented to analyze temporal trends, evaluate Year-over-Year (YoY) performance deceleration, and smooth out short-term fluctuations in customer churn:
+
+| Measure Name | DAX Formula | Description / Business Logic |
+| :--- | :--- | :--- |
 | Measure | Formula Summary |
 |---|---|
 | Churned Customer YTD | TOTALYTD(Churned Customer, Dates[Date]) |
@@ -165,3 +186,117 @@ The following risk segmentation measures isolate specific behavioral cohorts and
 | **Inactive Churn Rate** | `Inactive Churn Rate = CALCULATE([Churn Rate], 'Dim_Customer'[Is_Active] = "No")` | Measures the churn rate among dormant accounts, highlighting the conversion rate from low engagement to complete attrition. |
 
  
+---
+
+## Report Pages
+
+### 1. Executive Summary
+
+**Business Question:**  
+*What is the current customer churn situation, what financial impact does it create, and what are the key business drivers?*
+
+![Executive Summary](assets/executive_dashboard.png)
+
+**Key Visuals**
+- 5 KPI cards
+- Monthly churn trend
+- Churn rate by region
+- Churn by balance tier
+- Year-over-Year churn comparison
+- Churn reason breakdown
+
+
+---
+
+### 2. Customer Demographics
+
+**Business Question:**  
+*Which customer segments are most likely to churn based on demographic characteristics and product adoption?*
+
+![Customer Demographics](assets/demographics.png)
+
+**Key Visuals**
+- Churn by age band
+- Churn by gender
+- Churn by education level
+- Churn by employment status
+- Product ownership analysis
+- Customer activity distribution
+
+
+  ---
+
+  ### 3. Risk Analysis
+
+**Business Question:**  
+*Which customers represent the greatest financial and operational risk, and where should retention efforts be prioritized?*
+
+![Risk](assets/Risk.png)
+
+**Key Visuals**
+- Revenue at risk
+- Complaint analysis
+- Churn risk heatmap
+- Active vs inactive churn rate
+- High-value customer churn
+- Churn reasons by risk segment
+
+
+---
+
+## Key Business Insights
+
+1.  **Customers are choosing competitors over FirstEdge Bank**
+  The most common reason customers gave for leaving was "Better Competitor," ahead of high fees, poor service, and financial difficulty. Complaint levels were almost identical between customers who stayed and those who left (Complaint Gap: −0.11), suggesting that customer service is not the main reason people are leaving.
+This points to a competitive challenge rather than an operational one. Improving service remains important, but strengthening pricing, product offerings, and overall customer value is likely to have a greater impact on reducing churn.
+
+2. **Customer inactivity is an early sign that someone is about to leave**
+  Inactive customers consistently showed higher churn rates than active customers, with the 46–55 age group recording the highest overall churn rate (56.28%). This pattern appears before customers formally leave, giving the bank an opportunity to intervene.
+Rather than waiting until a customer closes their account, the bank can use inactivity as an early warning signal and reach out before the relationship is lost.
+
+3. **The first two years are where the bank loses the most customers.**
+  Customers who had been with the bank for less than two years recorded the highest churn rate (54.29%). At the same time, customers with only one banking product were more likely to leave than those using multiple products.
+These findings suggest that new customers are not becoming engaged quickly enough. A stronger onboarding experience and earlier cross-selling could help build longer-lasting customer relationships.
+
+4. **Customer churn is becoming a financial risk, not just a customer retention issue**
+   Around ₦3 billion in customer deposits are linked to churned accounts, with the East and North regions recording the highest churn rates. More importantly, high-balance customers are leaving at rates similar to the rest of the customer base, meaning valuable relationships are being lost without targeted intervention.
+Protecting these customers should be treated as both a retention priority and a financial one, especially in regions where churn is consistently above the overall average.
+
+
+---
+
+## Recommendations
+
+1. **Review pricing and product competitiveness**  
+   Conduct a market comparison of savings products, fees, and interest rates, with priority given to the East and North regions where customer churn is highest.
+
+2. **Implement an inactivity monitoring programme**  
+   Identify customers with no account activity for 60 days or more and trigger proactive engagement before they decide to leave.
+
+3. **Strengthen new customer onboarding**  
+   Introduce a structured onboarding journey that encourages customers to adopt a second banking product within their first 90 days.
+
+4. **Provide dedicated support for high-value customers**  
+   Assign relationship managers and tailored retention offers to customers with high account balances and strong credit profiles.
+
+5. **Refocus retention investment**  
+   Shift greater investment toward pricing, onboarding, and proactive retention initiatives, while maintaining customer service as a supporting—not primary—retention strategy.
+
+
+## Conclusion
+
+The analysis shows that FirstEdge Bank's biggest retention challenge is staying competitive and keeping customers engaged, rather than fixing service issues. Customers who become inactive, hold fewer products, or belong to high-risk regions are more likely to leave, giving the bank an opportunity to intervene before churn occurs. With targeted retention initiatives and ongoing monitoring through the Power BI dashboard, management can reduce customer losses, protect deposit balances, and strengthen long-term customer value.
+
+
+---
+
+## Tools Used
+| Tool                 | Purpose                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| **Power BI Desktop** | Data modeling, dashboard development, and interactive reporting                      |
+| **Power Query**      | Data cleaning, transformation, feature engineering, and query merging                |
+| **DAX**              | KPI development, time intelligence, financial impact analysis, and risk segmentation |
+| **Mockaroo**         | Synthetic retail banking dataset generation                                          |
+| **Microsoft Excel**  | Initial data validation and quality checks                                           |
+| **Microsoft Word**   | Executive summary and technical documentation                                        |
+                                           |
