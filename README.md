@@ -32,7 +32,7 @@ FirstEdge Bank is experiencing elevated customer attrition, creating significant
 ---
 
 ##  Business Problem 
-FirstEdge Bank is losing customers at a rate it cannot afford to ignore. More than half (51.7%) of its retail customers have either closed their accounts or become inactive, placing approximately ₦3 billion in customer deposits at risk. Customer churn is no longer just a retention issue—it has become a financial and growth challenge.
+FirstEdge Bank is losing customers at a rate it cannot afford to ignore. More than half (51.7%) of its retail customers have either closed their accounts or become inactive, placing approximately ₦3 billion in customer deposits at risk. Customer churn is no longer just a retention issue-it has become a financial and growth challenge.
 
 The bank also lacks clear visibility into who is leaving, why they are leaving, and where the problem is most severe. Churn is highest in the East (55.9%) and North (53.2%) regions, making it difficult to focus retention efforts where they will have the greatest impact. Although churn has fallen by 50% year over year, the overall churn rate remains far above an acceptable level.
 
@@ -49,7 +49,14 @@ Success will be measured by reducing overall churn to below 35%, lowering churn 
 
 **Primary Business Value:** Revenue Protection & Customer Retention
 
+---
 
+## Tools Used
+- Power BI for interactive dashboard creation and data visualization
+- DAX (Data Analysis Expressions) for calculated metrics and custom logic
+- Data modelling features in Power BI for optimized performance and relational integrity
+- Mockaroo for synthetic retail banking dataset generation
+  
 ---
 
 ## Project Objectives
@@ -244,7 +251,7 @@ The following risk segmentation measures isolate specific behavioral cohorts and
 
 ---
 
-## Key Business Insights
+## Key Insights
 
 1.  **Customers are choosing competitors over FirstEdge Bank**
   The most common reason customers gave for leaving was "Better Competitor," ahead of high fees, poor service, and financial difficulty. Complaint levels were almost identical between customers who stayed and those who left (Complaint Gap: −0.11), suggesting that customer service is not the main reason people are leaving.
@@ -280,7 +287,7 @@ Protecting these customers should be treated as both a retention priority and a 
    Assign relationship managers and tailored retention offers to customers with high account balances and strong credit profiles.
 
 5. **Refocus retention investment**  
-   Shift greater investment toward pricing, onboarding, and proactive retention initiatives, while maintaining customer service as a supporting—not primary—retention strategy.
+   Shift greater investment toward pricing, onboarding, and proactive retention initiatives, while maintaining customer service as a supporting-not primary-retention strategy.
 
 
 ## Conclusion
@@ -290,13 +297,4 @@ The analysis shows that FirstEdge Bank's biggest retention challenge is staying 
 
 ---
 
-## Tools Used
-| Tool                 | Purpose                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| **Power BI Desktop** | Data modeling, dashboard development, and interactive reporting                      |
-| **Power Query**      | Data cleaning, transformation, feature engineering, and query merging                |
-| **DAX**              | KPI development, time intelligence, financial impact analysis, and risk segmentation |
-| **Mockaroo**         | Synthetic retail banking dataset generation                                          |
-| **Microsoft Excel**  | Initial data validation and quality checks                                           |
-| **Microsoft Word**   | Executive summary and technical documentation                                        |
-                                           |
+
